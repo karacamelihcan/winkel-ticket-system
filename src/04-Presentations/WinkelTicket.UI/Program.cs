@@ -1,7 +1,22 @@
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using WinkelTicket.Core.Models;
+using WinkelTicket.Database.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<WinkelDbContext>(options => {
+    options.UseNpgsql(builder.Configuration.GetConnectionString("LocalDb"), 
+    sqlOptions => {
+        sqlOptions.MigrationsAssembly(Assembly.GetAssembly(typeof(WinkelDbContext)).GetName().Name);
+    });
+});
+
+builder.Services.AddIdentity<User,UserRoles>()
+                .AddEntityFrameworkStores<WinkelDbContext>();
 
 var app = builder.Build();
 
@@ -17,6 +32,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
