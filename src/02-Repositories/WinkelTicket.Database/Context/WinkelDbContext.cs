@@ -18,6 +18,17 @@ namespace WinkelTicket.Database.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<UserRoles>().HasData(
+                new UserRoles{
+                    Name = "Admin"
+                },
+                new UserRoles{
+                    Name = "Designer"
+                },
+                new UserRoles{
+                    Name = "Requester"
+                }
+            );
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
         }
