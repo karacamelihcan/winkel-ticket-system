@@ -20,13 +20,16 @@ namespace WinkelTicket.Database.Context
         {
             builder.Entity<UserRoles>().HasData(
                 new UserRoles{
-                    Name = "Admin"
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
                 },
                 new UserRoles{
-                    Name = "Designer"
+                    Name = "Designer",
+                    NormalizedName = "DESIGNER"
                 },
                 new UserRoles{
-                    Name = "Requester"
+                    Name = "Requester",
+                    NormalizedName = "REQUESTER"
                 }
             );
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
