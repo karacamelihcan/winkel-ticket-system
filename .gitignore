@@ -345,3 +345,4 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+src/04-Presentations/WinkelTicket.UI/internal-nlog-AspNetCore.txt
