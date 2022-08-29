@@ -1,0 +1,14 @@
+2022-08-29 11:48:19.6090 Info Message Template Auto Format enabled
+2022-08-29 11:48:19.6515 Info Loading assembly: NLog.Web.AspNetCore
+2022-08-29 11:48:19.6794 Info Adding target FileTarget(Name=allfile)
+2022-08-29 11:48:19.6800 Info Adding target FileTarget(Name=ownFile-web)
+2022-08-29 11:48:19.6800 Info Adding target ConsoleTarget(Name=lifetimeConsole)
+2022-08-29 11:48:19.7193 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=56, FilePath=/Users/melihcankaraca/Documents/winkel-ticket-system/src/04-Presentations/WinkelTicket.UI/bin/Debug/net6.0/NLog.config
+2022-08-29 11:48:20.0927 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=56, FilePath=/Users/melihcankaraca/Documents/winkel-ticket-system/src/04-Presentations/WinkelTicket.UI/bin/Debug/net6.0/NLog.config
+2022-08-29 11:49:24.8193 Info Message Template Auto Format enabled
+2022-08-29 11:49:24.8605 Info Loading assembly: NLog.Web.AspNetCore
+2022-08-29 11:49:24.8882 Info Adding target FileTarget(Name=allfile)
+2022-08-29 11:49:24.8882 Info Adding target FileTarget(Name=ownFile-web)
+2022-08-29 11:49:24.8882 Info Adding target ConsoleTarget(Name=lifetimeConsole)
+2022-08-29 11:49:24.9256 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=56, FilePath=/Users/melihcankaraca/Documents/winkel-ticket-system/src/04-Presentations/WinkelTicket.UI/bin/Debug/net6.0/NLog.config
+2022-08-29 11:49:25.2327 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=56, FilePath=/Users/melihcankaraca/Documents/winkel-ticket-system/src/04-Presentations/WinkelTicket.UI/bin/Debug/net6.0/NLog.config
