@@ -11,7 +11,7 @@
       "name": "WinkelTicket.UI",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
+      "preLaunchTask": "watch",
       // If you have changed target frameworks, make sure to update the program path.
       "program": "${workspaceFolder}/src/04-Presentations/WinkelTicket.UI/bin/Debug/net6.0/WinkelTicket.UI.dll",
       "args": [],
@@ -28,11 +28,6 @@
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"
       }
-    },
-    {
-      "name": ".NET Core Attach",
-      "type": "coreclr",
-      "request": "attach"
     }
   ]
 }

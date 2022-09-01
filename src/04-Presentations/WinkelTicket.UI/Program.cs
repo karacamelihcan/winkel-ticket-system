@@ -6,7 +6,7 @@ using NLog;
 using NLog.Web;
 using WinkelTicket.Core.Models;
 using WinkelTicket.Database.Context;
-using WinkelTicket.Database.Repositories;
+using WinkelTicket.Database.Repositories.UserRepositories;
 
 
 
