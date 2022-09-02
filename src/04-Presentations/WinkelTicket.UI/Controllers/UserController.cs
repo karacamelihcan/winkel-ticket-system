@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WinkelTicket.UI.Models;
 
 namespace WinkelTicket.UI.Controllers
 {
@@ -21,7 +22,15 @@ namespace WinkelTicket.UI.Controllers
         {
             return View();
         }
+        public IActionResult Add()
+        {
+          return View();
+        }
 
-
+        [HttpPost]
+        public async Task<IActionResult> Add(AddUserViewModel request)
+        {
+          return View();
+        }
     }
 }

@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using NLog;
 using NLog.Web;
 using WinkelTicket.Core.Models;

@@ -22,6 +22,5 @@ namespace WinkelTicket.UI.Controllers
             return View();
         }
 
-
     }
 }
