@@ -1,4 +1,4 @@
-@model AddUserViewModel
+@model AddUserRequest
 @{
     ViewBag.Title = "Kullanıcı İşlemleri";
     ViewBag.pTitle = "Kullanıcı Ekle";
@@ -63,10 +63,22 @@
         <div class="card">
             <div class="card-body">
                 <form asp-action="Add" asp-controller="User" method="post">
-                    @if (ViewBag.Result == "Error")
+                    @if (ViewBag.IsSuccessfull == false)
                     {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="mdi mdi-block-helper me-2"></i>
+                        @foreach (var error in ViewBag.Errors)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="mdi mdi-block-helper me-2"></i>
+                                @error
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                    }
+                    @if (ViewBag.IsSuccessfull == true)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="mdi mdi-check-all me-2"></i>
                             @ViewBag.Message
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
@@ -116,79 +128,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-<script>
-    function AddUser() {
-
-        let inputCheckLabel = document.getElementById("addUserCheck");
-        inputCheckLabel.innerHTML = "";
-        let name = document.getElementById('name').value;
-        if (name == "") {
-            inputCheckLabel.innerHTML = CheckMessageGenerator("Kullanıcı adı boş bırakılamaz", "error");
-            return;
-        }
-        let surname = document.getElementById("surname").value;
-        if (surname == "") {
-            inputCheckLabel.innerHTML = CheckMessageGenerator("Kullanıcı soyadı boş bırakılamaz", "error");
-            return;
-        }
-        let password = document.getElementById("password").value;
-        if (password == "") {
-            inputCheckLabel.innerHTML = CheckMessageGenerator("Kullanıcı şifresi boş bırakılamaz", "error");
-            return;
-        }
-        if (password.length < 6) {
-            inputCheckLabel.innerHTML = CheckMessageGenerator("Kullanıcı şifresi en az 6 karakterli olmalıdır.", "error");
-            return;
-        }
-        let passwordConfirm = document.getElementById("passwordConfirm").value;
-        if (password != passwordConfirm) {
-            inputCheckLabel.innerHTML = CheckMessageGenerator("Şifreler farklı olamaz.", "error");
-            return;
-        }
-
-
-    }
-
-    function CheckMessageGenerator(message, status) {
-        let response = ""
-        if (status == "error") {
-            response =
-                ` 
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="mdi mdi-block-helper me-2"></i>
-                        ${message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `;
-        }
-        if (status == "success") {
-            response =
-                ` 
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="mdi mdi-check-all me-2"></i>
-                        ${message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `;
-        }
-        return response;
-    }
-</script>
-
-
-
-
-@* BS Custom File Input LogIn *@
-<script src="~/libs/bs-custom-file-input"></script>
-
-<script src="~/js/form-element.init.js"></script>
-
-<!-- form mask -->
-<script src="~/libs/inputmask/jquery.inputmask.min.js"></script>
-
-<!-- form mask init -->
-<script src="~/js/form-mask.init.js"></script>

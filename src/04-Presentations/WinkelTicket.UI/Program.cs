@@ -8,8 +8,8 @@ using NLog.Web;
 using WinkelTicket.Core.Models;
 using WinkelTicket.Database.Context;
 using WinkelTicket.Database.Repositories.UserRepositories;
-
-
+using WinkelTicket.Database.UnitOfWorks;
+using WinkelTicket.Services.Services.UserServices;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
@@ -19,8 +19,15 @@ try
 
     // Add services to the container.
     builder.Services.AddControllersWithViews();
-
+    
+    //Repositories
     builder.Services.AddScoped<IUserRepository,UserRepository>();
+
+    //Services
+    builder.Services.AddScoped<IUserService,UserService>();
+
+    //Unit Of Work
+    builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
     builder.Services.AddDbContext<WinkelDbContext>(options => {
         options.UseNpgsql(builder.Configuration.GetConnectionString("LocalDb"), 
@@ -50,7 +57,7 @@ try
     };
 
     builder.Services.ConfigureApplicationCookie(options => {
-            options.LoginPath = new PathString("/Account/Login");
+            options.LoginPath = new PathString("/Account/LogIn");
             options.LogoutPath = new PathString("/Account/LogOut");
             options.Cookie = cookieBuilder;
             options.SlidingExpiration = true;
@@ -84,7 +91,7 @@ try
 
     app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+        pattern: "{controller=Account}/{action=LogIn}/{id?}");
 
     app.Run();
 }

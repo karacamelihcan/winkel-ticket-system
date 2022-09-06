@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WinkelTicket.Contract.Request.UserRequests;
 using WinkelTicket.Core.Models;
+using WinkelTicket.Database.Context;
 
 namespace WinkelTicket.Database.Repositories.UserRepositories
 {
@@ -12,10 +14,13 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly WinkelDbContext _context;
 
-        public UserRepository(UserManager<User> userManager)
+        public UserRepository(UserManager<User> userManager, WinkelDbContext context, SignInManager<User> signInManager)
         {
             _userManager = userManager;
+            _context = context;
+            _signInManager = signInManager;
         }
 
         public async Task<IdentityResult> AddUserAsync(User user, string password)
@@ -38,13 +43,13 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
         public async Task<bool> IsLockedOutAsync(User user)
         {
             var result = await _userManager.IsLockedOutAsync(user);
-            return true;
+            return result;
         }
 
         public async Task<bool> IsEmailConfirmedAsync(User user)
         {
             var result = await _userManager.IsEmailConfirmedAsync(user);
-            return true;
+            return result;
         }
 
         public async Task SignOutAsync()
@@ -78,7 +83,7 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
 
         public async Task<IdentityResult> SetLockoutEndDateAsync(User user)
         {
-            var result = await _userManager.SetLockoutEndDateAsync(user ,DateTimeOffset.Now.AddMinutes(20));
+            var result = await _userManager.SetLockoutEndDateAsync(user ,DateTimeOffset.Now.AddMinutes(5));
             return result;
         }
 
@@ -138,6 +143,12 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
         public async Task<IdentityResult> DeleteUserAsync(User user)
         {
             var result = await _userManager.DeleteAsync(user);
+            return result;
+        }
+
+        public async Task<IEnumerable<User>> GetAll()
+        {
+            var result = await _context.Users.AsNoTracking().ToListAsync();
             return result;
         }
     }

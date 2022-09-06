@@ -31,5 +31,6 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
         Task<IdentityResult> UpdateUserAsync(User user);
         Task SignInAsync(User user, bool isPersistent);
         Task<IdentityResult> DeleteUserAsync(User user);
+        Task<IEnumerable<User>> GetAll();
     }
 }
