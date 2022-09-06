@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 using WinkelTicket.Database.Context;
 
 namespace WinkelTicket.Database.UnitOfWorks
@@ -15,9 +17,9 @@ namespace WinkelTicket.Database.UnitOfWorks
             _context = context;
         }
 
-        public async Task BeginTransactionAsync()
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            await _context.Database.BeginTransactionAsync();
+            return  await _context.Database.BeginTransactionAsync();
         }
 
         public async Task CommitAsync()

@@ -1,7 +1,7 @@
-@model AddUserRequest
+@model UpdateUserRequest
 @{
     ViewBag.Title = "Kullanıcı İşlemleri";
-    ViewBag.pTitle = "Kullanıcı Ekle";
+    ViewBag.pTitle = "Kullanıcı Düzenle";
     ViewBag.pageTitle = "Kullanıcı İşlemleri";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,7 +10,7 @@
     <div class="col-lg-8 offset-lg-2">
         <div class="card">
             <div class="card-body">
-                <form asp-action="Add" asp-controller="User" method="post">
+                <form asp-action="Edit" asp-controller="User" method="post">
                     @if (ViewBag.IsSuccessfull == false)
                     {
                         @foreach (var error in ViewBag.Errors)
@@ -50,7 +50,6 @@
                                 <input class="form-control" placeholder="E-posta" asp-for="Email">
                             </div>
                         </div>
-
                         <div class="row mb-3">
                             <label asp-for="Password" class="col-sm-2 col-form-label"></label>
                             <div class="col-sm-6">
@@ -63,13 +62,23 @@
                                 <input class="form-control" placeholder="Kullanıcı Şifresi" asp-for="PasswordConfirm">
                             </div>
                         </div>
-                        <div class="d-flex justify-content-center mb-3">
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">
-                                Kullanıcı Ekle
-                                <i class="ri-arrow-right-line align-middle ms-2"></i>
-                            </button>
+                        <div class="row mb-3 gap-4">
+                            <div class="col-md-3">
+                                <a class="btn btn-primary waves-effect waves-light" asp-action="Index"
+                                    asp-controller="User">
+                                    <i class="mdi mdi-cancel align-middle"></i>
+                                    İptal Et
+                                </a>
+                            </div>
+                            <div class="col-md-5">
+                                <button type="submit" class="btn btn-success waves-effect waves-light">
+                                    Kullanıcıyı Güncelle
+                                    <i class="ri-arrow-right-line align-middle ms-2"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
+
                 </form>
 
             </div>

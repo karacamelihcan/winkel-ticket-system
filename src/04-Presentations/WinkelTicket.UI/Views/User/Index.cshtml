@@ -1,3 +1,4 @@
+@model List<UserDto>
 @{
     ViewBag.Title = "Kullanıcı İşlemleri";
     ViewBag.pTitle = "Kullanıcı Listesi";
@@ -12,59 +13,61 @@
         <div class="card">
             <div class="card-body d-flex flex-column">
                 <h1 class="card-title">Kullanıcı Listesi</h1>
-
                 <div class="d-flex justify-content-end mb-3">
-                    <button type="button" class="btn btn-primary waves-effect waves-light ">
+                    <a type="button" class="btn btn-primary waves-effect waves-light" asp-action="Add"
+                        asp-controller="User">
                         Yeni Kullanıcı Ekle
                         <i class="ri-arrow-right-line align-middle ms-2"></i>
-                    </button>
+                    </a>
                 </div>
+                @if (ViewBag.IsSuccessfull == false)
+                {
+                    @foreach (var error in ViewBag.Errors)
+                    {
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="mdi mdi-alert-outline me-2"></i>
+                            @error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
 
+                }
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover mb-0">
 
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Username</th>
-                                <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Username</th>
+                                <th>Kullanıcı Adı</th>
+                                <th>Kullanıcı Soyadı</th>
+                                <th>Email</th>
+                                <th>Kullanıcıyı Düzenle</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@@mdo</td>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@@fat</td>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@@twitter</td>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@@twitter</td>
+
+                            @if (ViewBag.IsSuccessfull == true)
+                            {
+                                @foreach (var user in Model)
+                                {
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td>@user.Name</td>
+                                        <td>@user.Surname</td>
+                                        <td>@user.Email</td>
+                                        <td class="UserEdit">
+                                            <a type="button" class="btn btn-success waves-effect waves-light"
+                                        asp-controller="User" asp-action="Edit" asp-route-userId="@user.Id">
+                                                <i class="mdi mdi-account-edit align-middle ms-2"></i>
+                                                Düzenle
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+
                             </tr>
                         </tbody>
                     </table>
