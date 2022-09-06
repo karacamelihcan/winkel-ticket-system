@@ -347,3 +347,7 @@ healthchecksdb
 MigrationBackup/
 src/04-Presentations/WinkelTicket.UI/internal-nlog-AspNetCore.txt
 src/04-Presentations/WinkelTicket.UI/wwwroot/images/
+src/04-Presentations/.DS_Store
+.DS_Store
+src/.DS_Store
+src/.DS_Store

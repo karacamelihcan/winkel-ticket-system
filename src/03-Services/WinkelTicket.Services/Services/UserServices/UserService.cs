@@ -90,6 +90,31 @@ namespace WinkelTicket.Services.Services.UserServices
             }
         }
 
+        public async Task<ServiceResponse<UserDto>> GetUserByIdAsync(string userId)
+        {
+            try
+            {
+                var user = await _userRepository.FindUserByIdAsync(userId);
+                if(user == null){
+                    return ServiceResponse<UserDto>.Fail("Böyle bir kullanıcı bulunmamaktadır");
+                }
+                else{
+                    var userDto = new UserDto(){
+                        Id = user.Id,
+                        Name = user.Name,
+                        Surname = user.Surname,
+                        Email = user.Email
+                    };
+                    return ServiceResponse<UserDto>.Success(userDto);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ServiceResponse<UserDto>.Fail(ex.Message);
+            }
+        }
+
         public async Task<ServiceResponse<SignInResult>> PasswordSignInAsync(LogInRequest request)
         {
             try
@@ -144,6 +169,51 @@ namespace WinkelTicket.Services.Services.UserServices
             {
                 _logger.LogError(ex.Message);
                 return ServiceResponse<EmptyModel>.Fail(ex.Message);
+            }
+        }
+
+        public async  Task<ServiceResponse<IdentityResult>> UpdateUserAsync(UpdateUserRequest request)
+        {
+            using (var transaction = await _unitOfWork.BeginTransactionAsync())
+            {
+                try
+                {
+                    var user = await _userRepository.FindUserByEmailAsync(request.Email);
+                    if(user == null){
+                        return ServiceResponse<IdentityResult>.Fail("Böyle bir kullanıcı bulunmamaktadır");
+                    }
+                    user.Name = request.Name;
+                    user.Surname = request.Surname;
+                    user.Email = request.Email;
+                    var resultInfo = await _userRepository.UpdateUserAsync(user);
+                    if(!resultInfo.Succeeded){
+                        var errors = resultInfo.Errors.Select(err => err.Description).ToList();
+                        return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
+                    }
+                    if(request.Password == null){
+                        await _unitOfWork.CommitAsync();
+                        await transaction.CommitAsync();
+                        return ServiceResponse<IdentityResult>.Success(resultInfo);
+                    }
+                    var token = await _userRepository.GeneratePasswordResetTokenAsync(user);
+                    var result = await _userRepository.ResetPasswordAsync(user,token,request.Password);
+
+                    if(!result.Succeeded){
+                        var errors = resultInfo.Errors.Select(err => err.Description).ToList();
+                        return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
+                    }
+
+                    await _userRepository.UpdateSecurityStampAsync(user);
+                    await _unitOfWork.CommitAsync();
+                    await transaction.CommitAsync();
+                    return ServiceResponse<IdentityResult>.Success(resultInfo);
+
+                }
+                catch (System.Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return ServiceResponse<IdentityResult>.Fail(ex.Message);
+                }
             }
         }
     }

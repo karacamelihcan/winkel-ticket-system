@@ -66,5 +66,47 @@ namespace WinkelTicket.UI.Controllers
 
           return View();
         }
+
+        public async Task<IActionResult> Edit(string userId)
+        {
+          var result = await _userService.GetUserByIdAsync(userId);
+
+          if(result.IsSuccessfull){
+            var viewData = new UpdateUserRequest(){
+                Id = result.Data.Id,
+                Name = result.Data.Name,
+                Surname = result.Data.Surname,
+                Email = result.Data.Email
+            };
+            return View(viewData);
+          }
+          else{
+            return RedirectToAction("Error","Home");
+          }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdateUserRequest request)
+        {
+            if(!ModelState.IsValid){
+                ViewBag.IsSuccessfull = false;
+                var errors = ModelState.Values.SelectMany(err => err.Errors)
+                                                .Select(err => err.ErrorMessage)
+                                                .ToList();
+                ViewBag.Errors = errors;     
+                return View(request);                         
+            }
+            var result = await _userService.UpdateUserAsync(request);
+            if(!result.IsSuccessfull){
+                ViewBag.IsSuccessfull = false;
+                ViewBag.Errors = result.Error.Errors.ToList();
+                return View(request);
+            }
+            else{
+                ViewBag.IsSuccessfull = true;
+                ViewBag.Message = "Kullanıcı başarıyla güncellenmiştir";
+            }
+          return View();
+        }
     }
 }
