@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using WinkelTicket.Contract.Request.UserRequests;
 using WinkelTicket.Services.Services.UserServices;
@@ -70,7 +71,7 @@ namespace WinkelTicket.UI.Controllers
         public async Task<IActionResult> Edit(string userId)
         {
           var result = await _userService.GetUserByIdAsync(userId);
-
+          var roles = await _userService.GetRoles();  
           if(result.IsSuccessfull){
             var viewData = new UpdateUserRequest(){
                 Id = result.Data.Id,
@@ -78,6 +79,8 @@ namespace WinkelTicket.UI.Controllers
                 Surname = result.Data.Surname,
                 Email = result.Data.Email
             };
+            var roleList = new SelectList(roles.Data,"Id","Name");
+            ViewBag.Roles = roleList;
             return View(viewData);
           }
           else{

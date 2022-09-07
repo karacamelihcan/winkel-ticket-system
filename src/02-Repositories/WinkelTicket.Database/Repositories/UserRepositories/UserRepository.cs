@@ -14,13 +14,15 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<UserRoles> _roleManager;
         private readonly WinkelDbContext _context;
 
-        public UserRepository(UserManager<User> userManager, WinkelDbContext context, SignInManager<User> signInManager)
+        public UserRepository(UserManager<User> userManager, WinkelDbContext context, SignInManager<User> signInManager, RoleManager<UserRoles> roleManager)
         {
             _userManager = userManager;
             _context = context;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IdentityResult> AddUserAsync(User user, string password)
@@ -149,6 +151,36 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
         public async Task<IEnumerable<User>> GetAll()
         {
             var result = await _context.Users.AsNoTracking().ToListAsync();
+            return result;
+        }
+
+        public async Task<IEnumerable<UserRoles>> GetRoles()
+        {
+            var result = await _roleManager.Roles.OrderBy(role => role.Name).AsNoTracking().ToListAsync();
+            return result;
+        }
+
+        public async Task<string> GetUserRoles(User user)
+        {
+            var role = await _userManager.GetRolesAsync(user) as List<string>;
+            return role.FirstOrDefault();
+        }
+
+        public async Task<UserRoles> GetRoleByRoleId(string Id)
+        {
+            var role = await _roleManager.Roles.FirstOrDefaultAsync(role => role.Id == Id);
+            return role;
+        }
+
+        public async Task<IdentityResult> AddToRoleAsync(User user, string RoleName)
+        {
+            var result = await _userManager.AddToRoleAsync(user,RoleName);
+            return result;
+        }
+
+        public async Task<IdentityResult> RemoveFromRoleAsync(User user, string RoleName)
+        {
+            var result = await _userManager.RemoveFromRoleAsync(user,RoleName);
             return result;
         }
     }
