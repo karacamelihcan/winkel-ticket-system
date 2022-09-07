@@ -76,7 +76,8 @@ namespace WinkelTicket.Services.Services.UserServices
                                 Id = user.Id,
                                 Name = user.Name,
                                 Surname = user.Surname,
-                                Email = user.Email
+                                Email = user.Email,
+                                Role = await _userRepository.GetUserRoles(user),
                             }
                         );
                     }
@@ -126,7 +127,8 @@ namespace WinkelTicket.Services.Services.UserServices
                         Id = user.Id,
                         Name = user.Name,
                         Surname = user.Surname,
-                        Email = user.Email
+                        Email = user.Email,
+                        Role = await _userRepository.GetUserRoles(user),
                     };
                     return ServiceResponse<UserDto>.Success(userDto);
                 }

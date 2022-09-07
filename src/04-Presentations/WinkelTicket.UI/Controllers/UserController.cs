@@ -71,7 +71,6 @@ namespace WinkelTicket.UI.Controllers
         public async Task<IActionResult> Edit(string userId)
         {
           var result = await _userService.GetUserByIdAsync(userId);
-          var roles = await _userService.GetRoles();  
           if(result.IsSuccessfull){
             var viewData = new UpdateUserRequest(){
                 Id = result.Data.Id,
@@ -79,6 +78,7 @@ namespace WinkelTicket.UI.Controllers
                 Surname = result.Data.Surname,
                 Email = result.Data.Email
             };
+            var roles = await _userService.GetRoles();  
             var roleList = new SelectList(roles.Data,"Id","Name");
             ViewBag.Roles = roleList;
             return View(viewData);
