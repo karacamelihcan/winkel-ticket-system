@@ -84,50 +84,6 @@
     });
   }
 
-  function initFullScreen() {
-    $('[data-toggle="fullscreen"]').on("click", function (e) {
-      e.preventDefault();
-      $("body").toggleClass("fullscreen-enable");
-      if (
-        !document.fullscreenElement &&
-        /* alternative standard method */ !document.mozFullScreenElement &&
-        !document.webkitFullscreenElement
-      ) {
-        // current working methods
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-          document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-          document.documentElement.webkitRequestFullscreen(
-            Element.ALLOW_KEYBOARD_INPUT
-          );
-        }
-      } else {
-        if (document.cancelFullScreen) {
-          document.cancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
-        }
-      }
-    });
-    document.addEventListener("fullscreenchange", exitHandler);
-    document.addEventListener("webkitfullscreenchange", exitHandler);
-    document.addEventListener("mozfullscreenchange", exitHandler);
-    function exitHandler() {
-      if (
-        !document.webkitIsFullScreen &&
-        !document.mozFullScreen &&
-        !document.msFullscreenElement
-      ) {
-        console.log("pressed");
-        $("body").removeClass("fullscreen-enable");
-      }
-    }
-  }
-
   function initRightSidebar() {
     // right side-bar toggle
     $(".right-bar-toggle").on("click", function (e) {
@@ -201,58 +157,6 @@
     });
   }
 
-  function initSettings() {
-    if (window.sessionStorage) {
-      var alreadyVisited = sessionStorage.getItem("is_visited");
-      if (!alreadyVisited) {
-        sessionStorage.setItem("is_visited", "light-mode-switch");
-      } else {
-        $(".right-bar input:checkbox").prop("checked", false);
-        $("#" + alreadyVisited).prop("checked", true);
-        updateThemeSetting(alreadyVisited);
-      }
-    }
-    $("#light-mode-switch, #dark-mode-switch, #rtl-mode-switch").on(
-      "change",
-      function (e) {
-        updateThemeSetting(e.target.id);
-      }
-    );
-  }
-
-  function updateThemeSetting(id) {
-    if (
-      $("#light-mode-switch").prop("checked") == true &&
-      id === "light-mode-switch"
-    ) {
-      $("html").removeAttr("dir");
-      $("#dark-mode-switch").prop("checked", false);
-      $("#rtl-mode-switch").prop("checked", false);
-      $("#bootstrap-style").attr("href", "/css/bootstrap.min.css");
-      $("#app-style").attr("href", "/css/app.min.css");
-      sessionStorage.setItem("is_visited", "light-mode-switch");
-    } else if (
-      $("#dark-mode-switch").prop("checked") == true &&
-      id === "dark-mode-switch"
-    ) {
-      $("html").removeAttr("dir");
-      $("#light-mode-switch").prop("checked", false);
-      $("#rtl-mode-switch").prop("checked", false);
-      $("#bootstrap-style").attr("href", "/css/bootstrap-dark.min.css");
-      $("#app-style").attr("href", "/css/app-dark.min.css");
-      sessionStorage.setItem("is_visited", "dark-mode-switch");
-    } else if (
-      $("#rtl-mode-switch").prop("checked") == true &&
-      id === "rtl-mode-switch"
-    ) {
-      $("#light-mode-switch").prop("checked", false);
-      $("#dark-mode-switch").prop("checked", false);
-      $("#bootstrap-style").attr("href", "/css/bootstrap-rtl.min.css");
-      $("#app-style").attr("href", "/css/app-rtl.min.css");
-      $("html").attr("dir", "rtl");
-      sessionStorage.setItem("is_visited", "rtl-mode-switch");
-    }
-  }
   function init() {
     initMetisMenu();
     initLeftMenuCollapse();
@@ -264,7 +168,6 @@
     initDropdownMenu();
     initComponents();
     initPreloader();
-    initSettings();
     Waves.init();
   }
 
