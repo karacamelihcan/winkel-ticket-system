@@ -1,4 +1,11 @@
-﻿<header id="page-topbar">
+﻿@{
+    var username = User.Claims.First(clm => clm.Type == ClaimTypes.GivenName).Value;
+    var surname = User.Claims.First(clm => clm.Type == ClaimTypes.Surname).Value;
+    var fullName = username + " " + surname;
+
+}
+
+<header id="page-topbar">
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
@@ -123,7 +130,7 @@
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img class="rounded-circle header-profile-user" src="~/images/users/avatar-2.jpg"
                         alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1">Kevin</span>
+                    <span class="d-none d-xl-inline-block ms-1">@fullName</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">

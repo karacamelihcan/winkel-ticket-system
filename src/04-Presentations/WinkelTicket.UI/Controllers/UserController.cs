@@ -13,7 +13,7 @@ using WinkelTicket.UI.Models;
 
 namespace WinkelTicket.UI.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "AdminOnlyPolicy")]
     public class UserController : Controller
     {
         private readonly ILogger<UserController> _logger;
