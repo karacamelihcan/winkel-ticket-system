@@ -3893,10 +3893,10 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
 }
 
 .authentication-bg {
-    background-image: url(../images/authentication-bg.jpg);
-    height: 100vh;
+    background-image: url(../images/authentication-bg.jpeg);
+    height: 98vh;
     background-size: cover;
-    background-position: center
+    background-position: center;
 }
 
 .authentication-bg .bg-overlay {
@@ -4866,7 +4866,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
 }
 
 .error-text {
-    color: #ff3d60;
+    color: #ed1a23;
     position: relative
 }
 

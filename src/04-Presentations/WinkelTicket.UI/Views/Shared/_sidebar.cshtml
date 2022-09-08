@@ -1,4 +1,7 @@
-﻿<!-- ========== Left Sidebar Start ========== -->
+﻿@{
+    var role = User.Claims.First(clm => clm.Type == ClaimTypes.Role).Value;
+}
+<!-- ========== Left Sidebar Start ========== -->
 <div class="vertical-menu">
 
     <div data-simplebar class="h-100">
@@ -15,16 +18,19 @@
                         <span>Anasayfa</span>
                     </a>
                 </li>
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="ri-account-circle-line"></i>
-                        <span>Kullanıcı İşlemleri</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href=@Url.Action("Index", "User")>Kullanıcı Listesi</a></li>
-                        <li><a href=@Url.Action("Add", "User")>Kullanıcı Ekle</a></li>
-                    </ul>
-                </li>
+                @if (role == "Admin")
+                {
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="ri-account-circle-line"></i>
+                            <span>Kullanıcı İşlemleri</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href=@Url.Action("Index", "User")>Kullanıcı Listesi</a></li>
+                            <li><a href=@Url.Action("Add", "User")>Kullanıcı Ekle</a></li>
+                        </ul>
+                    </li>
+                }
 
 
             </ul>

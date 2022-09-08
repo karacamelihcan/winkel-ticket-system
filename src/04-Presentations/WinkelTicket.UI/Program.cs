@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using WinkelTicket.Core.Models;
 using WinkelTicket.Database.Context;
 using WinkelTicket.Database.Repositories.UserRepositories;
 using WinkelTicket.Database.UnitOfWorks;
+using WinkelTicket.Services.Providers;
 using WinkelTicket.Services.Services.UserServices;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -24,6 +26,7 @@ try
     builder.Services.AddScoped<IUserRepository,UserRepository>();
 
     //Services
+    builder.Services.AddScoped<IClaimsTransformation,ClaimProvider>();
     builder.Services.AddScoped<IUserService,UserService>();
 
     //Unit Of Work
@@ -33,6 +36,12 @@ try
         options.UseNpgsql(builder.Configuration.GetConnectionString("LocalDb"), 
         sqlOptions => {
             sqlOptions.MigrationsAssembly(Assembly.GetAssembly(typeof(WinkelDbContext)).GetName().Name);
+        });
+    });
+
+    builder.Services.AddAuthorization(options => {
+        options.AddPolicy("AdminOnlyPolicy", policy => {
+            policy.RequireClaim(ClaimTypes.Role,"Admin");
         });
     });
 
