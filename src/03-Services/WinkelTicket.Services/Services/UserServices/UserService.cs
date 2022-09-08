@@ -10,7 +10,7 @@ using WinkelTicket.Core.Dtos;
 using WinkelTicket.Core.Models;
 using WinkelTicket.Database.Repositories.UserRepositories;
 using WinkelTicket.Database.UnitOfWorks;
-
+using System.Security.Claims;
 namespace WinkelTicket.Services.Services.UserServices
 {
     public class UserService : IUserService
@@ -39,15 +39,24 @@ namespace WinkelTicket.Services.Services.UserServices
                         UserName = request.Email,
                     };
                     var addUserResult = await _userRepository.AddUserAsync(user,request.Password);
-                    if(addUserResult.Succeeded){
-                        await _unitOfWork.CommitAsync();
-                        await transaction.CommitAsync();
-                        return ServiceResponse<IdentityResult>.Success();
-                    }
-                    else{
+                    if(!addUserResult.Succeeded){
+                        await transaction.RollbackAsync();
                         var errors = addUserResult.Errors.Select(err => err.Description).ToList();
                         return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
                     }
+                    var newRole = await _userRepository.GetRoleByRoleId(request.UserRoleId);
+                    if(newRole != null){
+                        var addResult = await _userRepository.AddToRoleAsync(user,newRole.Name);
+                        if(!addResult.Succeeded){
+                            var errors = addResult.Errors.Select(err => err.Description).ToList();
+                            await transaction.RollbackAsync();
+                            return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
+                        }
+                    }
+
+                    await _unitOfWork.CommitAsync();
+                    await transaction.CommitAsync();
+                    return ServiceResponse<IdentityResult>.Success();
                 }
                 catch (Exception ex)
                 {
@@ -76,7 +85,8 @@ namespace WinkelTicket.Services.Services.UserServices
                                 Id = user.Id,
                                 Name = user.Name,
                                 Surname = user.Surname,
-                                Email = user.Email
+                                Email = user.Email,
+                                Role = await _userRepository.GetUserRoles(user),
                             }
                         );
                     }
@@ -87,6 +97,29 @@ namespace WinkelTicket.Services.Services.UserServices
             {
                _logger.LogError(ex.Message);
                 return ServiceResponse<List<UserDto>>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<ServiceResponse<List<UserRoleDto>>> GetRoles()
+        {
+            try
+            {
+                var roles = await _userRepository.GetRoles();
+
+                var result = new List<UserRoleDto>();
+                foreach (var role in roles)
+                {
+                    result.Add(new UserRoleDto(){
+                        Id = role.Id,
+                        Name = role.Name
+                    });
+                }
+                return ServiceResponse<List<UserRoleDto>>.Success(result);
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ServiceResponse<List<UserRoleDto>>.Fail(ex.Message);
             }
         }
 
@@ -103,7 +136,8 @@ namespace WinkelTicket.Services.Services.UserServices
                         Id = user.Id,
                         Name = user.Name,
                         Surname = user.Surname,
-                        Email = user.Email
+                        Email = user.Email,
+                        Role = await _userRepository.GetUserRoles(user),
                     };
                     return ServiceResponse<UserDto>.Success(userDto);
                 }
@@ -190,6 +224,26 @@ namespace WinkelTicket.Services.Services.UserServices
                         var errors = resultInfo.Errors.Select(err => err.Description).ToList();
                         return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
                     }
+                    var role = await _userRepository.GetUserRoles(user);
+                    var newRole = await _userRepository.GetRoleByRoleId(request.UserRoleId);
+                    if(newRole != null){
+                        if(newRole.Name != role){
+                            var addResult = await _userRepository.AddToRoleAsync(user,newRole.Name);
+                            if(!addResult.Succeeded){
+                                var errors = addResult.Errors.Select(err => err.Description).ToList();
+                                await transaction.RollbackAsync();
+                                return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
+                            }
+                            if(role != null){
+                                var removeResult = await _userRepository.RemoveFromRoleAsync(user,role);
+                                if(!removeResult.Succeeded){
+                                var errors = removeResult.Errors.Select(err => err.Description).ToList();
+                                await transaction.RollbackAsync();
+                                return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
+                            }
+                            }
+                        }
+                    }
                     if(request.Password == null){
                         await _unitOfWork.CommitAsync();
                         await transaction.CommitAsync();
@@ -200,6 +254,7 @@ namespace WinkelTicket.Services.Services.UserServices
 
                     if(!result.Succeeded){
                         var errors = resultInfo.Errors.Select(err => err.Description).ToList();
+                        await transaction.RollbackAsync();
                         return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
                     }
 
@@ -212,6 +267,7 @@ namespace WinkelTicket.Services.Services.UserServices
                 catch (System.Exception ex)
                 {
                     _logger.LogError(ex.Message);
+                    await transaction.RollbackAsync();
                     return ServiceResponse<IdentityResult>.Fail(ex.Message);
                 }
             }

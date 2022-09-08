@@ -17,7 +17,7 @@ namespace WinkelTicket.Services.Services.UserServices
         Task<ServiceResponse<EmptyModel>> SignOutAsync();
         Task<ServiceResponse<UserDto>> GetUserByIdAsync(string userId);
         Task<ServiceResponse<IdentityResult>> UpdateUserAsync(UpdateUserRequest request);
-    
+        Task<ServiceResponse<List<UserRoleDto>>> GetRoles();
 
 
     }

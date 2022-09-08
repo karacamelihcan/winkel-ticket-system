@@ -36,11 +36,12 @@
                     <table class="table table-bordered table-hover mb-0">
 
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th>#</th>
                                 <th>Kullanıcı Adı</th>
                                 <th>Kullanıcı Soyadı</th>
                                 <th>Email</th>
+                                <th>Kullanıcı Rolü</th>
                                 <th>Kullanıcıyı Düzenle</th>
 
                             </tr>
@@ -51,11 +52,12 @@
                             {
                                 @foreach (var user in Model)
                                 {
-                                    <tr>
+                                    <tr class="text-center">
                                         <th scope="row"></th>
                                         <td>@user.Name</td>
                                         <td>@user.Surname</td>
                                         <td>@user.Email</td>
+                                        <td>@user.Role</td>
                                         <td class="UserEdit">
                                             <a type="button" class="btn btn-success waves-effect waves-light"
                                         asp-controller="User" asp-action="Edit" asp-route-userId="@user.Id">
@@ -66,8 +68,6 @@
                                     </tr>
                                 }
                             }
-
-
                             </tr>
                         </tbody>
                     </table>

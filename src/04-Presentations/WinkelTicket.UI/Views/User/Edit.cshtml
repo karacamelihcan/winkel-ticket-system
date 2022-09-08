@@ -33,32 +33,38 @@
                     }
                     <div class="offset-md-3">
                         <div class="row mb-3 ">
-                            <label asp-for="Name" class="col-sm-2 col-form-label"></label>
-                            <div class="col-sm-6">
+                            <label asp-for="Name" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
                                 <input class="form-control" placeholder="Kullanıcı Adı" asp-for="Name">
                             </div>
                         </div>
                         <div class="row mb-3 ">
-                            <label asp-for="Surname" class="col-sm-2 col-form-label"></label>
-                            <div class="col-sm-6">
+                            <label asp-for="Surname" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
                                 <input class="form-control" placeholder="Kullanıcı Soyadı" asp-for="Surname">
                             </div>
                         </div>
                         <div class="row mb-3 ">
-                            <label asp-for="Email" class="col-sm-2 col-form-label"></label>
-                            <div class="col-sm-6">
+                            <label asp-for="Email" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
                                 <input class="form-control" placeholder="E-posta" asp-for="Email">
                             </div>
                         </div>
+                        <div class="row mb-3 ">
+                            <label asp-for="UserRoleId" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
+                                <select asp-for="UserRoleId" class="form-select" asp-items="@ViewBag.Roles"></select>
+                            </div>
+                        </div>
                         <div class="row mb-3">
-                            <label asp-for="Password" class="col-sm-2 col-form-label"></label>
-                            <div class="col-sm-6">
+                            <label asp-for="Password" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
                                 <input class="form-control" placeholder="Kullanıcı Şifresi" asp-for="Password">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label asp-for="PasswordConfirm" class="col-sm-2 col-form-label"></label>
-                            <div class="col-sm-6">
+                            <label asp-for="PasswordConfirm" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
                                 <input class="form-control" placeholder="Kullanıcı Şifresi" asp-for="PasswordConfirm">
                             </div>
                         </div>
@@ -67,7 +73,7 @@
                                 <a class="btn btn-primary waves-effect waves-light" asp-action="Index"
                                     asp-controller="User">
                                     <i class="mdi mdi-cancel align-middle"></i>
-                                    İptal Et
+                                    Geri Dön
                                 </a>
                             </div>
                             <div class="col-md-5">
@@ -78,7 +84,6 @@
                             </div>
                         </div>
                     </div>
-
                 </form>
 
             </div>
