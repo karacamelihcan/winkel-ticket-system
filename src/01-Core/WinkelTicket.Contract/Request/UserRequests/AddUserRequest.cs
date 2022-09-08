@@ -33,5 +33,8 @@ namespace WinkelTicket.Contract.Request.UserRequests
         [DataType(DataType.Password)]
         [Compare("Password",ErrorMessage ="Yeni şifreniz ve onay şifreniz aynı olmalıdır")]
         public string PasswordConfirm { get; set; }
+
+        [Display(Name = "Kullanıcı Rolü")]
+        public string UserRoleId { get; set; }
     }
 }

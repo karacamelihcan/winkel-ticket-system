@@ -39,15 +39,24 @@ namespace WinkelTicket.Services.Services.UserServices
                         UserName = request.Email,
                     };
                     var addUserResult = await _userRepository.AddUserAsync(user,request.Password);
-                    if(addUserResult.Succeeded){
-                        await _unitOfWork.CommitAsync();
-                        await transaction.CommitAsync();
-                        return ServiceResponse<IdentityResult>.Success();
-                    }
-                    else{
+                    if(!addUserResult.Succeeded){
+                        await transaction.RollbackAsync();
                         var errors = addUserResult.Errors.Select(err => err.Description).ToList();
                         return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
                     }
+                    var newRole = await _userRepository.GetRoleByRoleId(request.UserRoleId);
+                    if(newRole != null){
+                        var addResult = await _userRepository.AddToRoleAsync(user,newRole.Name);
+                        if(!addResult.Succeeded){
+                            var errors = addResult.Errors.Select(err => err.Description).ToList();
+                            await transaction.RollbackAsync();
+                            return ServiceResponse<IdentityResult>.Fail(new ErrorResponse(errors));
+                        }
+                    }
+
+                    await _unitOfWork.CommitAsync();
+                    await transaction.CommitAsync();
+                    return ServiceResponse<IdentityResult>.Success();
                 }
                 catch (Exception ex)
                 {
