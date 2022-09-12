@@ -15,7 +15,9 @@ namespace WinkelTicket.Database.Context
         {
             
         }
-
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketComment> TicketComments { get; set; }
+        public DbSet<TicketFile> TicketFiles { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<UserRoles>().HasData(

@@ -14,6 +14,8 @@ namespace WinkelTicket.Database.Configurations
         {
             builder.Property(usr => usr.Name).IsRequired();
             builder.Property(usr => usr.Surname).IsRequired();
+
+            builder.HasMany(usr => usr.Tickets).WithMany(ticket => ticket.Assignees);
         }
     }
 }
