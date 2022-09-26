@@ -11,6 +11,6 @@ namespace WinkelTicket.Core.Models
         public string Message { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
         public User Sender { get; set; }
-        public List<TicketFile> Files { get; set; }
+        public ICollection<TicketFile> Files { get; set; } = new List<TicketFile>();
     }
 }

@@ -149,6 +149,9 @@ namespace WinkelTicket.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("ActualEndDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("CreatorId")
                         .HasColumnType("text");
 
@@ -156,8 +159,8 @@ namespace WinkelTicket.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly?>("ExpectedEndDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
@@ -242,6 +245,9 @@ namespace WinkelTicket.Database.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Avatar")
+                        .HasColumnType("text");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -252,6 +258,9 @@ namespace WinkelTicket.Database.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -280,6 +289,12 @@ namespace WinkelTicket.Database.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("text");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -304,6 +319,29 @@ namespace WinkelTicket.Database.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "474de032-f1ed-4845-a6dc-15bf32c02e63",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "44d079f5-6ae6-4e1f-9ec5-d215f90d99b4",
+                            Email = "melihcan.karaca@winkel.com.tr",
+                            EmailConfirmed = false,
+                            FullName = "Melihcan Kazım Karaca",
+                            LockoutEnabled = false,
+                            Name = "Melihcan Kazım",
+                            NormalizedEmail = "MELIHCAN.KARACA@WINKEL.COM.TR",
+                            NormalizedUserName = "MELIHCAN.KARACA@WINKEL.COM.TR",
+                            PasswordHash = "AQAAAAEAACcQAAAAELYQUIkW7lNhJdMbWZPYtgDmm2GxqBhN1ykOSm8Pw6IRqC13U1yw8ChYjLygSuoXRA==",
+                            PhoneNumberConfirmed = false,
+                            RoleId = "3a249142-9860-4781-b3f3-63b6e070cc45",
+                            RoleName = "Admin",
+                            SecurityStamp = "a4111caf-99f3-45e0-9d2a-70e6b48f62bd",
+                            Surname = "Karaca",
+                            TwoFactorEnabled = false,
+                            UserName = "melihcan.karaca@winkel.com.tr"
+                        });
                 });
 
             modelBuilder.Entity("WinkelTicket.Core.Models.UserRoles", b =>
@@ -334,22 +372,22 @@ namespace WinkelTicket.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e5582643-eb2d-416b-921e-f61d2f69523e",
-                            ConcurrencyStamp = "68db8fb5-fedf-4d9a-a69b-5146fc759084",
+                            Id = "fbfe9af1-05be-4384-9ba8-d17e0caecf20",
+                            ConcurrencyStamp = "4a7bbfd4-7f13-4111-a085-d36dff886704",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "e8627bea-67ca-4248-b31e-bb83223b6048",
-                            ConcurrencyStamp = "b2c618a8-ebdd-4e96-8e98-6105b46dc6f1",
+                            Id = "c6ed7348-f261-41f7-93a5-1f4a8132c91a",
+                            ConcurrencyStamp = "0dbd2ced-2af2-4f7c-8676-6b610af1ddf2",
                             Name = "Designer",
                             NormalizedName = "DESIGNER"
                         },
                         new
                         {
-                            Id = "e1b5c269-8191-4ef1-87ba-614ffe654478",
-                            ConcurrencyStamp = "7d3e3795-0539-490b-ba9e-1bb9c42ad5b5",
+                            Id = "7aac7272-3d4b-4a01-833a-139f8b2bef51",
+                            ConcurrencyStamp = "60162675-8397-4ed0-946f-0cf0109e8136",
                             Name = "Requester",
                             NormalizedName = "REQUESTER"
                         });

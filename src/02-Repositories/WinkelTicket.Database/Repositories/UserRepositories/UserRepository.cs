@@ -183,5 +183,23 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
             var result = await _userManager.RemoveFromRoleAsync(user,RoleName);
             return result;
         }
+
+        public async Task<List<User>> GetUserForTicketAssign()
+        {
+            var adminRole = await _roleManager.Roles.FirstOrDefaultAsync(role => role.Name == "Admin");
+            var designerRole = await _roleManager.Roles.FirstOrDefaultAsync(role => role.Name == "Designer");
+            
+            var UserIDs = await _context.UserRoles.Where(role => role.RoleId == adminRole.Id || role.RoleId == designerRole.Id)
+                                                 .Select(role => role.UserId)
+                                                 .ToListAsync();
+
+            var result = new List<User>();
+            foreach (var Id in UserIDs)
+            {
+                var user = await _userManager.FindByIdAsync(Id);
+                result.Add(user);
+            }
+            return result;
+        }
     }
 }

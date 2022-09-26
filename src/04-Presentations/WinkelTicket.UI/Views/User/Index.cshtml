@@ -50,17 +50,21 @@
 
                             @if (ViewBag.IsSuccessfull == true)
                             {
-                                @foreach (var user in Model)
+                                @foreach (var usr in Model)
                                 {
                                     <tr class="text-center">
-                                        <th scope="row"></th>
-                                        <td>@user.Name</td>
-                                        <td>@user.Surname</td>
-                                        <td>@user.Email</td>
-                                        <td>@user.Role</td>
+                                        <th scope="row">
+                                            <div class="avatar-xs d-inline-block ">
+                                                @Html.Raw(usr.Avatar)
+                                            </div>
+                                        </th>
+                                        <td> @usr.Name</td>
+                                        <td> @usr.Surname</td>
+                                        <td> @usr.Email</td>
+                                        <td> @usr.Role</td>
                                         <td class="UserEdit">
                                             <a type="button" class="btn btn-success waves-effect waves-light"
-                                        asp-controller="User" asp-action="Edit" asp-route-userId="@user.Id">
+                                        asp-controller="User" asp-action="Edit" asp-route-userId="@usr.Id">
                                                 <i class="mdi mdi-account-edit align-middle ms-2"></i>
                                                 Düzenle
                                             </a>

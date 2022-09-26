@@ -34,6 +34,9 @@ namespace WinkelTicket.Database.Context
                     NormalizedName = "REQUESTER"
                 }
             );
+
+            
+
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
         }

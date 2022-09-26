@@ -27,7 +27,6 @@ namespace WinkelTicket.UI.Models
         [MinLength(6,ErrorMessage = "Şifreniz en az 6 karakterli olmalıdır.")]
         public string Password { get; set; }
 
-
         [Required(ErrorMessage = "Şifre onayı boş bırakılamaz")]
         [Display(Name = "Onay Şifreniz")]
         [DataType(DataType.Password)]

@@ -84,22 +84,6 @@
     });
   }
 
-  function initRightSidebar() {
-    // right side-bar toggle
-    $(".right-bar-toggle").on("click", function (e) {
-      $("body").toggleClass("right-bar-enabled");
-    });
-
-    $(document).on("click", "body", function (e) {
-      if ($(e.target).closest(".right-bar-toggle, .right-bar").length > 0) {
-        return;
-      }
-
-      $("body").removeClass("right-bar-enabled");
-      return;
-    });
-  }
-
   function initDropdownMenu() {
     if (document.getElementById("topnav-menu-content")) {
       var elements = document
@@ -163,8 +147,6 @@
     initActiveMenu();
     initMenuItem();
     initMenuItemScroll();
-    initFullScreen();
-    initRightSidebar();
     initDropdownMenu();
     initComponents();
     initPreloader();

@@ -24,8 +24,8 @@ namespace WinkelTicket.Services.Providers
                 var userId = identity.Claims.FirstOrDefault(clm => clm.Type == ClaimTypes.NameIdentifier).Value;
                 var user = await _userRepository.FindUserByIdAsync(userId);
                 if(user != null){
-                    identity.AddClaim(new Claim(ClaimTypes.GivenName,user.Name,ClaimValueTypes.String));
-                    identity.AddClaim(new Claim(ClaimTypes.Surname,user.Surname,ClaimValueTypes.String));
+                    identity.AddClaim(new Claim(ClaimTypes.GivenName,user.Name +" "+user.Surname,ClaimValueTypes.String));
+                    identity.AddClaim(new Claim(ClaimTypes.UserData,user.Avatar,ClaimValueTypes.String));
                 }
             }
 

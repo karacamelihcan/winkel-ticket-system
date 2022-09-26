@@ -8,16 +8,17 @@ namespace WinkelTicket.Core.Models
 {
     public class Ticket
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Description { get; set; }
         public string Title { get; set; }
         public DateTime StartDate { get; set; } = DateTime.UtcNow;    
         public bool isTimeLimited { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateOnly? ExpectedEndDate { get; set; }
+        public DateTime ActualEndDate { get; set; }
         public EnumTicketStatus TicketStatus { get; set; } = EnumTicketStatus.Todo;
         public User Creator { get; set; } 
         public EnumTicketPriority Priority { get; set; } = EnumTicketPriority.Medium;
-        public List<TicketComment> Comments { get; set; }
-        public List<User> Assignees { get; set; }
+        public ICollection<TicketComment> Comments { get; set; } = new List<TicketComment>();
+        public ICollection<User> Assignees { get; set; } = new List<User>();
     }
 }

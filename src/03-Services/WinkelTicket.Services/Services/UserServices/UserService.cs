@@ -11,6 +11,8 @@ using WinkelTicket.Core.Models;
 using WinkelTicket.Database.Repositories.UserRepositories;
 using WinkelTicket.Database.UnitOfWorks;
 using System.Security.Claims;
+using WinkelTicket.Services.Mapping;
+
 namespace WinkelTicket.Services.Services.UserServices
 {
     public class UserService : IUserService
@@ -33,10 +35,12 @@ namespace WinkelTicket.Services.Services.UserServices
                 try
                 {
                     var user = new User(){
-                        Name = request.Name,
-                        Surname = request.Surname,
-                        Email = request.Email,
-                        UserName = request.Email,
+                        Name = request.Name.Trim(),
+                        Surname = request.Surname.Trim(),
+                        FullName = request.Name.Trim()+ " "+ request.Surname.Trim(),
+                        Email = request.Email.Trim(),
+                        UserName = request.Email.Trim(),
+                        Avatar = CreateAvatar(request.Name)
                     };
                     var addUserResult = await _userRepository.AddUserAsync(user,request.Password);
                     if(!addUserResult.Succeeded){
@@ -46,6 +50,8 @@ namespace WinkelTicket.Services.Services.UserServices
                     }
                     var newRole = await _userRepository.GetRoleByRoleId(request.UserRoleId);
                     if(newRole != null){
+                        user.RoleId = newRole.Id;
+                        user.RoleName = newRole.Name;
                         var addResult = await _userRepository.AddToRoleAsync(user,newRole.Name);
                         if(!addResult.Succeeded){
                             var errors = addResult.Errors.Select(err => err.Description).ToList();
@@ -67,6 +73,14 @@ namespace WinkelTicket.Services.Services.UserServices
             }
         }
 
+        private string CreateAvatar(string Name){
+            var firstLetter = Name.Substring(0,1);
+            var avatarURl = "<span class=\"avatar-title bg-soft-primary text-primary rounded-circle\">"
+                             + firstLetter + "<span>";
+            return avatarURl ;
+                                            
+        }
+
         public async Task<ServiceResponse<List<UserDto>>> GetAll()
         {
             try
@@ -81,13 +95,7 @@ namespace WinkelTicket.Services.Services.UserServices
                     foreach (var user in userList)
                     {
                         result.Add(
-                            new UserDto(){
-                                Id = user.Id,
-                                Name = user.Name,
-                                Surname = user.Surname,
-                                Email = user.Email,
-                                Role = await _userRepository.GetUserRoles(user),
-                            }
+                            ObjectMapper.Mapper.Map<UserDto>(user)
                         );
                     }
                     return ServiceResponse<List<UserDto>>.Success(result);
@@ -109,10 +117,7 @@ namespace WinkelTicket.Services.Services.UserServices
                 var result = new List<UserRoleDto>();
                 foreach (var role in roles)
                 {
-                    result.Add(new UserRoleDto(){
-                        Id = role.Id,
-                        Name = role.Name
-                    });
+                    result.Add(ObjectMapper.Mapper.Map<UserRoleDto>(role));
                 }
                 return ServiceResponse<List<UserRoleDto>>.Success(result);
             }
@@ -132,13 +137,7 @@ namespace WinkelTicket.Services.Services.UserServices
                     return ServiceResponse<UserDto>.Fail("Böyle bir kullanıcı bulunmamaktadır");
                 }
                 else{
-                    var userDto = new UserDto(){
-                        Id = user.Id,
-                        Name = user.Name,
-                        Surname = user.Surname,
-                        Email = user.Email,
-                        Role = await _userRepository.GetUserRoles(user),
-                    };
+                    var userDto = ObjectMapper.Mapper.Map<UserDto>(user);
                     return ServiceResponse<UserDto>.Success(userDto);
                 }
             }
@@ -146,6 +145,34 @@ namespace WinkelTicket.Services.Services.UserServices
             {
                 _logger.LogError(ex.Message);
                 return ServiceResponse<UserDto>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<ServiceResponse<List<UserDto>>> GetUserForTicketAssign()
+        {
+            try
+            {
+                var userList = await _userRepository.GetUserForTicketAssign();
+                if(!userList.Any()){
+                    var errMsg = "Kayıtlı herhangi bir kullanıcı bulunmamaktadır";
+                    return ServiceResponse<List<UserDto>>.Fail(errMsg);
+                }
+                else{
+                    var result = new List<UserDto>();
+                    foreach (var user in userList)
+                    {
+                        result.Add(
+                            ObjectMapper.Mapper.Map<UserDto>(user)
+                        );
+                    }
+
+                    return ServiceResponse<List<UserDto>>.Success(result);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ServiceResponse<List<UserDto>>.Fail(ex.Message);
             }
         }
 

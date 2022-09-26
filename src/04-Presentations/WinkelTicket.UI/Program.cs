@@ -8,9 +8,11 @@ using NLog;
 using NLog.Web;
 using WinkelTicket.Core.Models;
 using WinkelTicket.Database.Context;
+using WinkelTicket.Database.Repositories.TicketRepositories;
 using WinkelTicket.Database.Repositories.UserRepositories;
 using WinkelTicket.Database.UnitOfWorks;
 using WinkelTicket.Services.Providers;
+using WinkelTicket.Services.Services.TicketServices;
 using WinkelTicket.Services.Services.UserServices;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -24,10 +26,12 @@ try
     
     //Repositories
     builder.Services.AddScoped<IUserRepository,UserRepository>();
+    builder.Services.AddScoped<ITicketRepository,TicketRepository>();
 
     //Services
     builder.Services.AddScoped<IClaimsTransformation,ClaimProvider>();
     builder.Services.AddScoped<IUserService,UserService>();
+    builder.Services.AddScoped<ITicketService,TicketService>();
 
     //Unit Of Work
     builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();

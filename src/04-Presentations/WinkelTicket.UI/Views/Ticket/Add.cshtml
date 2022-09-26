@@ -1,0 +1,123 @@
+@model AddTicketRequest
+@{
+    ViewBag.Title = "Görev İşlemleri";
+    ViewBag.pTitle = "Görev Oluştur";
+    ViewBag.pageTitle = "Görev İşlemleri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+<link href="~/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+}
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Add" asp-controller="Ticket" method="post">
+                    @if (ViewBag.IsSuccessfull == false)
+                    {
+                        @foreach (var error in ViewBag.Errors)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="mdi mdi-block-helper me-2"></i>
+                                @error
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                    }
+                    @if (ViewBag.IsSuccessfull == true)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="mdi mdi-check-all me-2"></i>
+                            @ViewBag.Message
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    <div class="offset-md-1">
+                        <div class="row mb-3 ">
+                            <label asp-for="Title" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
+                                <input asp-for="Title" class="form-control" placeholder="Başlık">
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label asp-for="isTimeLimited" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
+                                <select asp-for="isTimeLimited" class="form-select"
+                                    asp-items="@ViewBag.isTimeLimitedValues"></select>
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label asp-for="EndDate" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
+                                <input asp-for="EndDate" class="form-control" disabled="true">
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label asp-for="Priority" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
+                                <select asp-for="Priority" class="form-select" asp-items="@ViewBag.Priority"></select>
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label asp-for="Assignees" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-5">
+                                <select asp-for="Assignees" class="elect2 form-control select2-multiple"
+                                    asp-items="@ViewBag.UserList"></select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div>
+                        <div class="row mb-3">
+                            <label asp-for="Description" class="col-sm-3 col-form-label"></label>
+                            <div class="">
+                                @* <textarea id="description-field" name="area" asp-for="Description"></textarea> *@
+                                @Html.TextAreaFor(model => model.Description , new {
+                                @id = "description-field"
+                                })
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-center mb-3">
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">
+                                Yeni Görev Oluştur
+                                <i class="ri-arrow-right-line align-middle ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var isTimeLimited = document.getElementById("isTimeLimited");
+    var EndDate = document.getElementById("EndDate");
+    isTimeLimited.addEventListener("change", function () {
+        if (this.value == "True") {
+            EndDate.removeAttribute("disabled", "");
+        }
+        else {
+            EndDate.setAttribute("disabled", "true");
+        }
+    })
+</script>
+
+<!-- JAVASCRIPT -->
+<script src="~/libs/jquery/jquery.min.js"></script>
+
+<!--tinymce js-->
+<script src="~/libs/tinymce/tinymce.min.js"></script>
+
+<!-- init js -->
+<script src="~/js/pages/form-editor.init.js"></script>

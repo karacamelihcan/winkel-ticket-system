@@ -37,5 +37,6 @@ namespace WinkelTicket.Database.Repositories.UserRepositories
         Task<UserRoles> GetRoleByRoleId(string Id);
         Task<IdentityResult> AddToRoleAsync(User user, string RoleName);
         Task<IdentityResult> RemoveFromRoleAsync(User user,string RoleName);
+        Task<List<User>> GetUserForTicketAssign();
     }
 }

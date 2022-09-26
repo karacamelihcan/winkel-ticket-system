@@ -4886,4 +4886,8 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
     }
 }
 
+.kanban-table {
+    min-height: 216px;
+}
+
 /*# sourceMappingURL=app.min.css.map */

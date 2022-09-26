@@ -1,5 +1,6 @@
 ﻿@{
-    var role = User.Claims.First(clm => clm.Type == ClaimTypes.Role).Value;
+    var role = User.Claims.FirstOrDefault(clm => clm.Type == ClaimTypes.Role).Value;
+
 }
 <!-- ========== Left Sidebar Start ========== -->
 <div class="vertical-menu">
@@ -31,6 +32,16 @@
                         </ul>
                     </li>
                 }
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-artboard-2-line""></i>
+                        <span>Görev İşlemleri</span>
+                    </a>
+                    <ul class=" sub-menu" aria-expanded="false">
+                <li><a href=@Url.Action("Index", "Ticket")>Görev Listesi </a></li>
+                <li><a href=@Url.Action("Add", "Ticket")>Görev Oluştur</a></li>
+            </ul>
+            </li>
 
 
             </ul>

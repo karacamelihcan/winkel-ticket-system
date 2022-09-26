@@ -10,7 +10,11 @@ namespace WinkelTicket.Core.Models
     {
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string FullName { get; set; }
+        public string RoleId { get; set; }
+        public string RoleName { get; set; }
+        public string Avatar { get; set; }
         
-        public List<Ticket> Tickets { get; set; }
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

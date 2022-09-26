@@ -1,8 +1,6 @@
 ﻿@{
-    var username = User.Claims.First(clm => clm.Type == ClaimTypes.GivenName).Value;
-    var surname = User.Claims.First(clm => clm.Type == ClaimTypes.Surname).Value;
-    var fullName = username + " " + surname;
-
+    var fullName = User.Claims.First(clm => clm.Type == ClaimTypes.GivenName).Value;
+    var avatar = User.Claims.FirstOrDefault(clm => clm.Type == ClaimTypes.UserData).Value;
 }
 
 <header id="page-topbar">
@@ -126,10 +124,12 @@
             </div>
 
             <div class="dropdown d-inline-block user-dropdown">
-                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="~/images/users/avatar-2.jpg"
-                        alt="Header Avatar">
+                <div class="avatar-xs d-inline-block ">
+                    @Html.Raw(avatar)
+                </div>
+                <button type="button" class="btn header-item " id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+
                     <span class="d-none d-xl-inline-block ms-1">@fullName</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
